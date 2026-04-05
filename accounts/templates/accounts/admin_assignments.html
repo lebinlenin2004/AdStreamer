@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    input, select { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: inherit; margin-bottom: 1rem;}
+    input:focus, select:focus { outline: none; border-color: var(--primary); }
+</style>
+<div class="card" style="margin-bottom: 2rem;">
+    <h3 style="margin-top: 0;">Assign Ad to Screen</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            {% for field in form %}
+                <div>
+                    <label style="display:block; color: var(--text-muted); margin-bottom: 0.5rem; font-size: 0.9rem;">{{ field.label }}</label>
+                    {{ field }}
+                    <span style="color:#ff4b4b; font-size: 0.8rem;">{{ field.errors }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn" style="margin-top: 1rem;">Create Assignment</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3 style="margin-top: 0;">Current Display Schedule</h3>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <th style="padding: 1rem;">Screen</th>
+                    <th style="padding: 1rem;">Ad Content</th>
+                    <th style="padding: 1rem;">Start Date</th>
+                    <th style="padding: 1rem;">End Date</th>
+                    <th style="padding: 1rem;">Order</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in assignments %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 1rem; color: var(--primary);">{{ a.screen.name }}</td>
+                    <td style="padding: 1rem;">{{ a.ad.title }}</td>
+                    <td style="padding: 1rem; color: var(--text-muted);">{{ a.start_date|date:"M d, Y H:i" }}</td>
+                    <td style="padding: 1rem; color: var(--text-muted);">{{ a.end_date|date:"M d, Y H:i" }}</td>
+                    <td style="padding: 1rem;">{{ a.display_order }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 1rem; text-align: center; color: var(--text-muted);">No assignments scheduled yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

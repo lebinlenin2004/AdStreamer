@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block sidebar_extra %}
+<a href="/admin/" class="nav-link" target="_blank">Full Database Admin</a>
+{% endblock %}
+
+{% block content %}
+<div class="grid">
+    <div class="card">
+        <h3>Total Screens</h3>
+        <div class="metric-value">{{ screens.count }}</div>
+    </div>
+    <div class="card">
+        <h3>Total Ads</h3>
+        <div class="metric-value">{{ ads.count }}</div>
+    </div>
+    <div class="card">
+        <h3>Total Ad Plays</h3>
+        <div class="metric-value">{{ logs_count }}</div>
+    </div>
+</div>
+
+<div class="grid" style="margin-top: 3rem;">
+    <div>
+        <h3 style="margin-top: 0;">Currently Playing Ads</h3>
+        <div class="card" style="padding: 1rem; padding-bottom: 0;">
+            <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Screen</th>
+                        <th style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Ad Title</th>
+                        <th style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Until</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in active_assignments %}
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--primary);">{{ a.screen.name }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">{{ a.ad.title }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-muted);">{{ a.end_date|time:"H:i" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="padding: 1rem; text-align: center; color: var(--text-muted);">No ads are actively assigned right now.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <h3 style="margin-top: 0;">Screens Status</h3>
+        <div class="card" style="padding: 1rem; padding-bottom: 0;">
+            <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Name</th>
+                        <th style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Location</th>
+                        <th style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for screen in screens %}
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">{{ screen.name }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">{{ screen.location }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            {% if screen.is_online %}
+                                <span style="color: #00e5ff">ONLINE</span>
+                            {% else %}
+                                <span style="color: #ff4b4b">OFFLINE</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

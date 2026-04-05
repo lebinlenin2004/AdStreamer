@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Signage Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --bg: #0f111a;
+            --surface: #1e2133;
+            --surface-hover: #2a2d42;
+            --primary: #00e5ff;
+            --secondary: #bd00ff;
+            --text: #ffffff;
+            --text-muted: #a0a4c0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--surface);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3rem;
+            display: block;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            padding: 1rem 1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            color: var(--primary);
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: #ff4b4b;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background: rgba(255, 75, 75, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="/" class="logo">AdStreamer</a>
+        <a href="/" class="nav-link active">Dashboard</a>
+        {% if request.user.role == 'ADMIN' %}
+        <div style="margin-top: 2rem; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; padding: 0 1.5rem; margin-bottom: 0.5rem;">Management</div>
+        <a href="{% url 'admin_users' %}" class="nav-link">Users</a>
+        <a href="{% url 'admin_screens' %}" class="nav-link">Screens</a>
+        <a href="{% url 'admin_ads' %}" class="nav-link">Ads</a>
+        <a href="{% url 'admin_assignments' %}" class="nav-link">Assignments</a>
+        <a href="{% url 'admin_system_logs' %}" class="nav-link" style="color: var(--primary);">System Logs 🟢</a>
+        {% endif %}{% block sidebar_extra %}{% endblock %}
+        <a href="{% url 'logout' %}" class="logout-btn">Log Out</a>
+    </div>
+
+    <div class="main-content">
+        <div class="header-top">
+            <h2>Welcome back, {{ request.user.username }}</h2>
+            <div class="user-role">{{ request.user.role }}</div>
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

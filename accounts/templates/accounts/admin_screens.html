@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    input, select { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: inherit; margin-bottom: 1rem;}
+    input:focus { outline: none; border-color: var(--primary); }
+</style>
+<div class="card" style="margin-bottom: 2rem;">
+    <h3 style="margin-top: 0;">Provision New Screen</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <label style="display:block; color: var(--text-muted); margin-bottom: 0.5rem;">Name (e.g. Lobby TV)</label>
+                {{ form.name }}
+            </div>
+            <div>
+                <label style="display:block; color: var(--text-muted); margin-bottom: 0.5rem;">Location</label>
+                {{ form.location }}
+            </div>
+        </div>
+        <button type="submit" class="btn" style="margin-top: 0.5rem;">Register Screen</button>
+    </form>
+</div>
+
+<div class="card">
+    <h3 style="margin-top: 0;">Active Devices</h3>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <th style="padding: 1rem;">Screen Name</th>
+                    <th style="padding: 1rem;">Location</th>
+                    <th style="padding: 1rem;">Status</th>
+                    <th style="padding: 1rem;">Pairing Token (UUID)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in screens %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 1rem;">{{ s.name }}</td>
+                    <td style="padding: 1rem; color: var(--text-muted);">{{ s.location }}</td>
+                    <td style="padding: 1rem;">
+                        {% if s.is_online %}
+                            <span style="color: #00e5ff">ONLINE</span>
+                        {% else %}
+                            <span style="color: #ff4b4b">OFFLINE</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 1rem; font-family: monospace; color: var(--secondary);">{{ s.pairing_token }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="padding: 1rem; text-align: center; color: var(--text-muted);">No screens provisioned yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
