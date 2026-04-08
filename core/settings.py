@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -62,7 +63,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,3 +136,39 @@ LOGIN_URL = 'login'
 
 CORS_ALLOW_ALL_ORIGINS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Advisor Admin",
+    "site_header": "Advisor Control",
+    "site_brand": "Advisor Dashboard",
+    "welcome_sign": "Welcome to the Advisor Administration Panel",
+    "copyright": "Advisor Ltd",
+    "search_model": ["accounts.User", "content.Ad"],
+    "icons": {
+        "accounts.user": "fas fa-users",
+        "accounts.profile": "fas fa-id-card",
+        "content.ad": "fas fa-ad",
+        "content.adassignment": "fas fa-tasks",
+        "displays.screen": "fas fa-tv",
+        "analytics.adplaylog": "fas fa-chart-line",
+        "auth.Group": "fas fa-users-cog",
+    },
+    "show_ui_builder": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_mode_theme": "darkly",
+    "accent": "accent-primary",
+    "sidebar": "sidebar-dark-primary",
+    "navbar": "navbar-dark",
+    "brand_colour": "navbar-dark",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
+}

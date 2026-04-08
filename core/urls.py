@@ -21,6 +21,12 @@ from django.conf.urls.static import static
 from displays.views import screen_viewer
 from core.views import dashboard
 
+# Restrict default admin site to superusers only
+def superuser_has_permission(request):
+    return request.user.is_active and request.user.is_superuser
+
+admin.site.has_permission = superuser_has_permission
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),

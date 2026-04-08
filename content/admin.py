@@ -5,6 +5,7 @@ from .models import Ad, AdAssignment
 class AdAdmin(admin.ModelAdmin):
     list_display = ('title', 'advertiser', 'duration', 'is_active', 'approval_status')
     list_filter = ('is_active', 'approval_status')
+    search_fields = ('title', 'advertiser__username', 'advertiser__email')
 
 @admin.register(AdAssignment)
 class AdAssignmentAdmin(admin.ModelAdmin):
